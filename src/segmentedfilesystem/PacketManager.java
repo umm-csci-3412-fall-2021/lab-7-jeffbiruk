@@ -3,6 +3,10 @@ package segmentedfilesystem;
 import segmentedfilesystem.Packets.DataPacket;
 import segmentedfilesystem.Packets.HeaderPacket;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,11 +57,23 @@ public class PacketManager {
             if (status % 4 == 3) {
                 finalID = dataPacket.getFileID();
                 receivedAll = true;
+                // this needs modification. just because the final packet was received doesnt mean downloading should stop
+                // needs to check that all three files have received all the packets that they need somehow
             }
         }
     }
 
     private boolean fileExists(byte fileID) {
         return files.stream().anyMatch(file -> file.fileID == fileID);
+    }
+
+    public void saveFiles(){
+        for (ReceivedFile file: files){
+            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir") + "/" + file.fileName)) {
+                fos.write(file.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

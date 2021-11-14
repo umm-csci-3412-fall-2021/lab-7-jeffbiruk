@@ -1,5 +1,6 @@
 package segmentedfilesystem;
 
+import java.util.Iterator;
 import java.util.SortedMap;
 
 public class ReceivedFile {
@@ -9,6 +10,27 @@ public class ReceivedFile {
 
     public ReceivedFile(byte fileID) {
         this.fileID = fileID;
+    }
+
+    public byte[] getBytes(){
+        byte[] result = new byte[getFileSizeInBytes()];
+        Iterator<byte[]> iterator = packets.values().iterator();
+        int index = 0;
+        while (iterator.hasNext()){
+             for (byte a: iterator.next()){
+                 result[index] = a;
+                 index++;
+             }
+        }
+        return result;
+    }
+
+    public int getFileSizeInBytes(){
+        int size = 0;
+        for (byte[] a: packets.values()){
+            size += a.length;
+        }
+        return size;
     }
 
     public byte getFileID() {

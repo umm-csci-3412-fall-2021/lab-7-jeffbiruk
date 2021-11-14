@@ -14,18 +14,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PacketManager {
-    int finalID;
-    boolean receivedAll;
     List<ReceivedFile> files;
 
     public PacketManager() {
-        finalID = 0;
-        receivedAll = false;
-        files = new ArrayList<ReceivedFile>();
+        files = new ArrayList<>();
     }
 
     public boolean haveReceivedAllPackets() {
-        return receivedAll;
+        return files.stream().allMatch(file->file.complete);
     }
 
     public void receive(DatagramPacket packet) {
@@ -42,23 +38,23 @@ public class PacketManager {
         } else { // Data packet
             DataPacket dataPacket = new DataPacket(bytes);
 
+            if (status % 4 == 3) { // final packet for a file
+                int finalPacketNumber = dataPacket.getPacketNumber();
+                files = files.stream().peek(file->{
+                    if (file.fileID == dataPacket.getFileID()) file.finalPacketID = finalPacketNumber;
+                }).collect(Collectors.toList());
+            }
+
             if (fileExists(dataPacket.getFileID())) {
                 files = files.stream().peek(file -> {
                     if (file.fileID == dataPacket.getFileID()) {
-                        file.packets.put(dataPacket.getPacketNumber(), dataPacket.getData());
+                        file.addPacket(dataPacket);
                     }
                 }).collect(Collectors.toList());
             } else {
                 ReceivedFile newFile = new ReceivedFile(dataPacket.getFileID());
-                newFile.packets.put(dataPacket.getPacketNumber(), dataPacket.getData());
+                newFile.addPacket(dataPacket);
                 files.add(newFile);
-            }
-
-            if (status % 4 == 3) {
-                finalID = dataPacket.getFileID();
-                receivedAll = true;
-                // this needs modification. just because the final packet was received doesnt mean downloading should stop
-                // needs to check that all three files have received all the packets that they need somehow
             }
         }
     }
@@ -66,6 +62,7 @@ public class PacketManager {
     private boolean fileExists(byte fileID) {
         return files.stream().anyMatch(file -> file.fileID == fileID);
     }
+
 
     public void saveFiles(){
         for (ReceivedFile file: files){

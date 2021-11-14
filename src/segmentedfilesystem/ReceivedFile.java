@@ -1,15 +1,22 @@
 package segmentedfilesystem;
 
+import segmentedfilesystem.Packets.DataPacket;
+
 import java.util.Iterator;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class ReceivedFile {
     public byte fileID;
+    public int finalPacketID;
     public String fileName;
-    public SortedMap<Integer, byte[]> packets;
+    public SortedMap<Integer, byte[]> packets; // packet # -> data
+    public boolean complete;
 
     public ReceivedFile(byte fileID) {
         this.fileID = fileID;
+        this.packets = new TreeMap<>();
+        this.complete = false;
     }
 
     public byte[] getBytes(){
@@ -31,6 +38,18 @@ public class ReceivedFile {
             size += a.length;
         }
         return size;
+    }
+
+    public void addPacket(DataPacket packet){
+        packets.put(packet.getPacketNumber(),packet.getData());
+        boolean complete = true;
+        for (int i = 0; i < finalPacketID; i++) {
+            if (!this.packets.containsKey(i)) {
+                complete = false;
+                break;
+            }
+        }
+        this.complete = complete;
     }
 
     public byte getFileID() {

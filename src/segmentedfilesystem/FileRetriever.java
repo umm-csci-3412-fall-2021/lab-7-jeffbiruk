@@ -35,6 +35,7 @@ public class FileRetriever {
 			socket.receive(packet);
 			packetManager.receive(packet);
 		}
+		packetManager.saveFiles();
 	}
 
 }

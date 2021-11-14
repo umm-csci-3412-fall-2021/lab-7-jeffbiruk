@@ -19,4 +19,37 @@ public class DataPacket extends Packet {
         this.packetNumber = x * 256 + y;
         this.data = Arrays.copyOfRange(bytes, 4,bytes.length);
     }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
+
+    @Override
+    public byte getFileID() {
+        return fileID;
+    }
+
+    public void setFileID(byte fileID) {
+        this.fileID = fileID;
+    }
+
+    public int getPacketNumber() {
+        return packetNumber;
+    }
+
+    public void setPacketNumber(int packetNumber) {
+        this.packetNumber = packetNumber;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
 }

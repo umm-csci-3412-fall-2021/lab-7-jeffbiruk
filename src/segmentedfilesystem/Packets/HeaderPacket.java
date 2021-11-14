@@ -13,4 +13,20 @@ public class HeaderPacket extends Packet {
         this.fileID = bytes[1];
         this.fileName = new String(Arrays.copyOfRange(bytes,2,bytes.length - 1));
     }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 }

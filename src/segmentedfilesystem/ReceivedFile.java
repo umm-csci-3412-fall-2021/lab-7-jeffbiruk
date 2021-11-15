@@ -43,6 +43,9 @@ public class ReceivedFile {
     public void addPacket(DataPacket packet){
         packets.put(packet.getPacketNumber(),packet.getData());
         boolean complete = true;
+
+        if (finalPacketID == 0) this.complete = false;
+
         for (int i = 0; i < finalPacketID; i++) {
             if (!this.packets.containsKey(i)) {
                 complete = false;

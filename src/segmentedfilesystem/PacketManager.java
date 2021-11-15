@@ -21,6 +21,7 @@ public class PacketManager {
     }
 
     public boolean haveReceivedAllPackets() {
+        if(files.size() == 0) return false;
         return files.stream().allMatch(file->file.complete);
     }
 

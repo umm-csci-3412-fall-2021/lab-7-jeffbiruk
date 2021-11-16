@@ -44,7 +44,7 @@ public class ReceivedFile {
         packets.put(packet.getPacketNumber(),packet.getData());
         boolean complete = true;
 
-        if (finalPacketID == 0) this.complete = false;
+        if (finalPacketID == 0) complete = false;
 
         for (int i = 0; i < finalPacketID; i++) {
             if (!this.packets.containsKey(i)) {

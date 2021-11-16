@@ -41,8 +41,8 @@ public class FileRetriever {
 		}
 
 		while (!packetManager.haveReceivedAllPackets()){
-			byte[] data = new byte[1024];
-			DatagramPacket packet = new DatagramPacket(data, 1024);
+			byte[] data = new byte[1028];
+			DatagramPacket packet = new DatagramPacket(data, 1028);
 			socket.receive(packet);
 			packetManager.receive(packet);
 		}

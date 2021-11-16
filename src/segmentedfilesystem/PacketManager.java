@@ -22,7 +22,11 @@ public class PacketManager {
 
     public boolean haveReceivedAllPackets() {
         if(files.size() == 0) return false;
-        return files.stream().allMatch(file->file.complete);
+        return files.stream().allMatch(file-> {
+            files.size();
+//            System.out.println("something");
+            return file.complete;
+        });
     }
 
     public void receive(DatagramPacket packet) {
@@ -30,19 +34,22 @@ public class PacketManager {
         byte status = bytes[0];
 
         if (status % 2 == 0) { // Header Packet
-            HeaderPacket headerPacket = new HeaderPacket(bytes);
+            HeaderPacket headerPacket = new HeaderPacket(bytes, packet.getLength());
             files = files.stream().peek(file -> {
                 if (file.fileID == headerPacket.getFileID()) {
                     file.setFileName(headerPacket.getFileName());
                 }
             }).collect(Collectors.toList());
         } else { // Data packet
-            DataPacket dataPacket = new DataPacket(bytes);
+            DataPacket dataPacket = new DataPacket(bytes, packet.getLength());
 
             if (status % 4 == 3) { // final packet for a file
                 int finalPacketNumber = dataPacket.getPacketNumber();
                 files = files.stream().peek(file->{
-                    if (file.fileID == dataPacket.getFileID()) file.finalPacketID = finalPacketNumber;
+                    if (file.fileID == dataPacket.getFileID()) {
+                        file.finalPacketID = finalPacketNumber;
+                        file.receivedFinalPacket = true;
+                    }
                 }).collect(Collectors.toList());
             }
 

@@ -7,11 +7,13 @@ import java.util.Arrays;
 public class HeaderPacket extends Packet {
     byte status;
     String fileName;
-    public HeaderPacket(byte[] bytes) {
+    int packetSize;
+    public HeaderPacket(byte[] bytes, int packetSize) {
         super(bytes);
+        this.packetSize = packetSize;
         this.status = bytes[0];
         this.fileID = bytes[1];
-        this.fileName = new String(Arrays.copyOfRange(bytes,2,bytes.length - 1));
+        this.fileName = new String(Arrays.copyOfRange(bytes,2, packetSize));
     }
 
     public byte getStatus() {

@@ -31,9 +31,9 @@ public class FileRetriever {
 		DatagramSocket socket;
 
 		try {
-			socket = new DatagramSocket(port, InetAddress.getByName(server));
+			socket = new DatagramSocket();
 			byte[] buf = new byte[1028];
-			DatagramPacket packet = new DatagramPacket(buf, buf.length, InetAddress.getByName(server), port);
+			DatagramPacket packet = new DatagramPacket(buf, buf.length, Inet4Address.getByName(server), port);
 			socket.send(packet);
 		} catch(IOException e) {
 			e.printStackTrace();

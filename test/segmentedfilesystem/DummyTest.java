@@ -1,8 +1,10 @@
 package segmentedfilesystem;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
-import org.junit.Test;
+//import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * This is just a stub test file. You should rename it to
@@ -10,10 +12,13 @@ import org.junit.Test;
  * useful tests.
  */
 public class DummyTest {
-
-    @Test
-    public void test() {
-        fail("Not yet implemented");
+    public static void main(String[] args) throws IOException {
+        Main.main(args);
     }
+
+//    @Test
+//    public void test() {
+//        fail("Not yet implemented");
+//    }
 
 }

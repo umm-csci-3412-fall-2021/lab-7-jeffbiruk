@@ -1,6 +1,7 @@
 package segmentedfilesystem;
 
 import segmentedfilesystem.Packets.DataPacket;
+import segmentedfilesystem.Packets.HeaderPacket;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class ReceivedFile {
         this.fileID = fileID;
         this.packets = new TreeMap<>();
         this.complete = false;
+        this.finalPacketID = -1;
     }
 
     public byte[] getBytes() {
@@ -57,22 +59,14 @@ public class ReceivedFile {
 
         }
         if (complete) {
-            System.out.println("Hey");
-            System.out.println("");
-            saveFile();
+            System.out.println("Finished downloading " + fileName + ".");
         }
         this.complete = complete;
     }
 
-    public void saveFile() {
-        String path = System.getProperty("user.dir") + "/" + fileName;
-        System.out.println(path);
-        try (FileOutputStream fos = new FileOutputStream(path)) {
-            fos.write(getBytes());
-            System.out.println("Saved " + fileName + "!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void addPacket(HeaderPacket packet) {
+        fileID = packet.getFileID();
+        fileName = packet.getFileName();
     }
 
     public byte getFileID() {

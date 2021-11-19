@@ -85,7 +85,7 @@ public class PacketManager {
 
     public void saveFiles() {
         for (ReceivedFile file : files) {
-            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir") + "/" + file.fileName)) {
+            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir") + "/src/" + file.fileName)) {
                 fos.write(file.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();

@@ -28,13 +28,25 @@ public class FileRetriever {
         // call for that, but there are a bunch of possible
         // ways.
 		PacketManager packetManager = new PacketManager();
-		DatagramSocket socket = new DatagramSocket(port, InetAddress.getByName(server));
+		DatagramSocket socket;
+
+		try {
+			socket = new DatagramSocket();
+			byte[] buf = new byte[1028];
+			DatagramPacket packet = new DatagramPacket(buf, buf.length, Inet4Address.getByName(server), port);
+			socket.send(packet);
+		} catch(IOException e) {
+			e.printStackTrace();
+			return;
+		}
+
 		while (!packetManager.haveReceivedAllPackets()){
-			byte[] data = new byte[1024];
-			DatagramPacket packet = new DatagramPacket(data, 1024);
+			byte[] data = new byte[1028];
+			DatagramPacket packet = new DatagramPacket(data, 1028);
 			socket.receive(packet);
 			packetManager.receive(packet);
 		}
+		packetManager.saveFiles();
 	}
 
 }

@@ -37,13 +37,14 @@ setup(){
   # Uncomment this line if you want to see the result of
   # the diff if this test is failing. Similar lines can
   # help with the other tests.
-  # diff test/target-files/small.txt src/small.txt
+  diff test/target-files/small.txt src/small.txt
   run diff test/target-files/small.txt src/small.txt
 
   [ "$status" -eq 0 ]
 }
 
 @test "Your client correctly assembled AsYouLikeIt.txt" {
+  diff test/target-files/AsYouLikeIt.txt src/AsYouLikeIt.txt
   run diff test/target-files/AsYouLikeIt.txt src/AsYouLikeIt.txt
 
   [ "$status" -eq 0 ]

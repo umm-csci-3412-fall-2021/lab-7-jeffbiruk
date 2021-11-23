@@ -15,6 +15,8 @@ fi
 rm -f segmentedfilesystem/*.class
 javac segmentedfilesystem/*.java
 
+sleep 2
+
 # Run the client
 java segmentedfilesystem.Main "$server"
 
